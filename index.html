@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>🎁 Seu Presente Chegou!</title>
+  <style>
+    body {
+      margin: 0;
+      background: #111;
+      overflow: hidden;
+      font-family: 'Courier New', Courier, monospace;
+      color: limegreen;
+      text-align: center;
+    }
+
+    .present {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      animation: jump 1s infinite ease-in-out;
+    }
+
+    @keyframes jump {
+      0%, 100% { transform: translate(-50%, -50%) scale(1); }
+      50% { transform: translate(-50%, -55%) scale(1.05); }
+    }
+
+    .log {
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 1.2em;
+      background-color: #000;
+      padding: 10px;
+      border-radius: 8px;
+    }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+  <img src="321aed3b-ee16-43db-8441-eb956d4506e5.png" class="present" width="300" alt="Seu presente sou eu">
+  <div class="log">console.log('🎁 Seu presente sou eu');</div>
+
+  <canvas id="confetti"></canvas>
+
+  <script>
+    // Confetti simples em canvas
+    const canvas = document.getElementById("confetti");
+    const ctx = canvas.getContext("2d");
+    let width = canvas.width = window.innerWidth;
+    let height = canvas.height = window.innerHeight;
+
+    const pieces = [];
+    const colors = ["#f00", "#0f0", "#00f", "#ff0", "#0ff", "#f0f"];
+
+    for (let i = 0; i < 150; i++) {
+      pieces.push({
+        x: Math.random() * width,
+        y: Math.random() * height - height,
+        size: 4 + Math.random() * 4,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        speedY: 1 + Math.random() * 3,
+        speedX: Math.random() * 1 - 0.5
+      });
+    }
+
+    function update() {
+      ctx.clearRect(0, 0, width, height);
+      pieces.forEach(p => {
+        p.y += p.speedY;
+        p.x += p.speedX;
+        if (p.y > height) p.y = 0;
+        if (p.x > width) p.x = 0;
+        if (p.x < 0) p.x = width;
+        ctx.fillStyle = p.color;
+        ctx.fillRect(p.x, p.y, p.size, p.size);
+      });
+      requestAnimationFrame(update);
+    }
+
+    update();
+    window.addEventListener('resize', () => {
+      width = canvas.width = window.innerWidth;
+      height = canvas.height = window.innerHeight;
+    });
+  </script>
+</body>
+</html>
